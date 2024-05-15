@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .navbar-top {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .navbar-top a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #555;
+        margin-left: 10px;
+      }
+      .navbar-top a:hover {
+        background-color: #666;
+      }
+      .main {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      .card {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar top -->
+    <div class="navbar-top">
+      <h1>Profile</h1>
+      <div>
+        <% if(!userdetails) {%>
+        <a href="/add-details">Add Details</a>
+        <% }%>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="main">
+      <h2>IDENTITY</h2>
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>:</td>
+              <td><%=user.username%></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>:</td>
+              <td><%=user.email%></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <% if(userdetails) {%>
+      <h2>Your Employee Details</h2>
+      <div class="card">
+        <table>
+          <tbody>
+            <tr>
+              <td>First Name</td>
+              <td>:</td>
+              <td><%=userdetails.firstName%></td>
+            </tr>
+            <tr>
+              <td>Last Name</td>
+              <td>:</td>
+              <td><%=userdetails.lastName%></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>:</td>
+              <td><%=userdetails.email%></td>
+            </tr>
+            <tr>
+              <td>Age</td>
+              <td>:</td>
+              <td><%=userdetails.age%></td>
+            </tr>
+            <tr>
+              <td>Department</td>
+              <td>:</td>
+              <td><%=userdetails.department%></td>
+            </tr>
+            <tr>
+              <td>Position</td>
+              <td>:</td>
+              <td><%=userdetails.position%></td>
+            </tr>
+            <tr>
+              <td>Salary</td>
+              <td>:</td>
+              <td><%=userdetails.salary%></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>

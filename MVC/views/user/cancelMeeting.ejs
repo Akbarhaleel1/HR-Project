@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cancel Meeting</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f5;
+      }
+      .container {
+        background: white;
+        width: 80%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        color: #555;
+        margin: 20px 0;
+      }
+      button {
+        padding: 10px 30px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #ff4b5a;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background-color: #e04050;
+      }
+      .button-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cancel Meeting</h1>
+      <p>Are you sure you want to cancel this meeting?</p>
+      <div class="button-container">
+        <button onclick="confirmCancellation()">Confirm</button>
+        <button onclick="goBack()" style="background-color: #ccc; color: #333">
+          Back
+        </button>
+      </div>
+    </div>
+    <script>
+      function confirmCancellation() {
+        alert("Meeting cancelled successfully.");
+        // Add more JavaScript here to handle the cancellation logic, such as making an API call or redirecting the user
+      }
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+  </body>
+</html>

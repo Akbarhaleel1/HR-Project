@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meeting Scheduler</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      header .logo {
+        width: 100px;
+      }
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      nav ul li {
+        display: inline;
+        margin-left: 20px;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      form {
+        margin-bottom: 20px;
+      }
+      input[type="text"],
+      input[type="datetime-local"],
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #5c67f2;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #434ab0;
+      }
+      .meeting {
+        border: 1px solid #ddd;
+        margin-top: 8px;
+        padding: 8px;
+        border-radius: 4px;
+        background-color: #fafafa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .meeting button {
+        margin-left: 10px;
+        font-size: 0.8em;
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <!-- <img src="" alt="Company Logo" class="logo"> -->
+      <nav>
+        <ul>
+          <li>
+            <a style="text-decoration: none; color: white" href="/home">Home</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class="container">
+      <h1>Meeting Scheduler</h1>
+      <form id="meetingForm" method="post" action="/sheduleMeeting">
+          <input type="text" name="title" placeholder="Meeting Title" required />
+          <input type="datetime-local" name="startTime" required />
+          <input type="datetime-local" name="endTime" required />
+          <button type="submit">Schedule Meeting</button>
+      </form>
+  
+      <h2>Your Scheduled Meetings</h2>
+      <div id="meetingsList">
+          <% if (!sheduleMeetings) { %>
+              <p>Error: Meetings data not available.</p>
+          <% } else if (sheduleMeetings.length === 0) { %>
+              <p>No scheduled meetings found.</p>
+          <% } else { %> 
+              <% sheduleMeetings.forEach(function(meeting) { %>
+                  <div class="meeting">
+                      <strong><%= meeting.title %></strong> from <%= new
+                      Date(meeting.startTime).toLocaleString() %> to <%= new
+                      Date(meeting.endTime).toLocaleString() %> 
+                      <% if (meeting.status==='cancelled') { %>
+                          <span style="color: red">Cancelled</span>
+                      <% } else{%>
+                          <button onclick="cancelMeeting('<%= meeting._id %>')">Cancel</button>
+                      <%}%>
+                  </div>
+              <% }); %> 
+          <% } %>
+      </div>
+  </div>
+  <footer>
+      <p>© 2024 Your Company Name. All rights reserved.</p>
+  </footer>
+
+
+<script>
+  document.getElementById('meetingForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, schedule it!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              this.submit(); // Proceed with the form submission if confirmed
+          }
+      });
+  });
+</script>
+
+<script>
+    function cancelMeeting(meetingId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you really want to cancel this meeting?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("/cancel-meeting", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ meetingId: meetingId })
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        console.log("Response Status:", response.status);
+                        throw new Error("Network response was not ok.");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Cancelled!',
+                            text: 'Your meeting has been cancelled.',
+                            icon: 'success'
+                        }).then((result) => {
+                            if (result.isConfirmed || result.isDismissed) {
+                                window.location.reload(); // This will reload the page
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: 'Failed to cancel the meeting: ' + data.message,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while cancelling the meeting.',
+                        icon: 'error'
+                    });
+                });
+            }
+        });
+    }
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+  </html>

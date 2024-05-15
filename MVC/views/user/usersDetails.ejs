@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System - Edit Employees</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>/* Base styling for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        
+        header {
+            background-color: #0052cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        th {
+            background-color: #e3e4e6;
+            color: #333;
+        }
+        
+        td input[type="text"],
+        td input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 10px auto;
+            }
+        
+            header {
+                padding: 15px;
+            }
+        }
+        </style>
+</head>
+<body>
+    <header>
+        Employee Management System - Edit Employees
+    </header>
+    <div class="container">
+        <h2>Employee List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Position</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% employees.forEach(function(employee) { %>
+                    <form method="POST" action="/userDetails">
+                        <tr>
+                            <td><%= employee.firstName +" "+employee.lastName %></td>
+                            <td><%= employee.email %></td>
+                            <td><input type="text" name="department" value="<%= employee.department %>"></td>
+                            <td><input type="number" name="salary" value="<%= employee.salary %>"></td>
+                            <td><input type="text" name="position" value="<%= employee.position %>"></td>
+                            <td>
+                                <input type="hidden" name="email" value="<%= employee.email %>">
+                                <button type="submit">Save Changes</button>
+                            </td>
+                        </tr>
+                    </form>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
